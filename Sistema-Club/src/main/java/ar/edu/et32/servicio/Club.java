@@ -6,13 +6,13 @@ import ar.edu.et32.modelo.Socio;
 
 public class Club {
     private String nombre;
-    private Sede sede;                      
+    private Sede sede;           //creacion del objeto           
     private ArrayList<Socio> listaSocios;   
 
     // Constructor completo (Composición)
     public Club(String nombre, String direccionSede) {
         this.nombre = nombre;
-        this.sede = new Sede(direccionSede); 
+        this.sede = new Sede(direccionSede); //instancia
         this.listaSocios = new ArrayList<>();
     }
     
@@ -35,8 +35,8 @@ public class Club {
             System.out.println("Sede en: " + sede.getDireccion());
         }
         
-        for (Socio s : listaSocios) {
-            s.mostrarCredencial(); // Este método está en la interfaz/clase Socio
+        for (Socio aux : listaSocios) { //for each
+            aux.mostrarCredencial(); // Este método está en la interfaz/clase Socio
         }
     }
 }

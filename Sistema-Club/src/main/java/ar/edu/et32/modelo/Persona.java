@@ -3,6 +3,8 @@ package ar.edu.et32.modelo;
 public abstract class Persona {
     private String nombre; // Encapsulamiento: privado
 
+    public abstract void caminar();
+    
     public Persona(String nombre) {
         this.nombre = nombre;
     }
