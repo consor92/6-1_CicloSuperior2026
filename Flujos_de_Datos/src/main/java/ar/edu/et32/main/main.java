@@ -3,12 +3,15 @@ package ar.edu.et32.main;
 import java.io.IOException;
 
 import ar.edu.et32.FlujoDatos.Utils;
+import ar.edu.et32.FlujoDatos.coleciones;
 
 public class main {
 
 	public static void main(String[] args) {
 
 		Utils lec = new Utils();
+		coleciones col = new coleciones();
+		
 		//Lecturas.getLector();  // instancia con STATIC
 		// int  <=>  char 
 		try {
