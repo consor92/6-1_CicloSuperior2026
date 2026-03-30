@@ -1,9 +1,12 @@
 package ar.edu.et32.FlujoDatos;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
-public class Lecturas {
+public class Utils {
 	/*	 Canales de comunicacion Standar de una APP/OS
 	 *   SALIDA ->    OUT
 	 *   Entrada ->   IN
@@ -20,15 +23,20 @@ public class Lecturas {
 	 *   }
 	 */
 	
-	private BufferedReader lector;
+	private static BufferedReader lector;
+	private static PrintWriter out;
 	
-	public Lecturas() {
-//Buffered(alamacenamiento) -> reader(algo que une) ->   consola(canal)
+	public Utils() {
+		//Buffered(alamacenamiento) -> reader(algo que une) ->   consola(canal)
 		lector = new BufferedReader(  new InputStreamReader(System.in) );
+		out = new PrintWriter( new BufferedWriter( new OutputStreamWriter(System.out) ) ,true );
 	}
 
-	public BufferedReader getLector() {
+	public static BufferedReader getLector() {
 		return lector;
+	}
+	public static PrintWriter getOut() {
+		return out;
 	}
 	
 	
