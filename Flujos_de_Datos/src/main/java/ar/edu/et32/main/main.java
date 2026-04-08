@@ -1,11 +1,8 @@
 package ar.edu.et32.main;
 
-import java.io.IOException;
 
-import ar.edu.et32.FlujoDatos.CadenasDeCaracteres;
 import ar.edu.et32.FlujoDatos.EjemploEjercicios;
 import ar.edu.et32.FlujoDatos.Utils;
-import ar.edu.et32.FlujoDatos.coleciones;
 
 public class main {
 
