@@ -16,7 +16,7 @@ public class main {
 		EjemploEjercicios ejercicios = new EjemploEjercicios();
 		//CadenasDeCaracteres textos = new CadenasDeCaracteres();
 		
-		ejercicios.Guia1_Ej7();
+		//ejercicios.Guia1_Ej7();
 	}
 
 }

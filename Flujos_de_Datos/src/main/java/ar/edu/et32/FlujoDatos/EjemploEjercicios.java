@@ -1,7 +1,5 @@
 package ar.edu.et32.FlujoDatos;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 
 
@@ -9,11 +7,51 @@ public class EjemploEjercicios {
 
 
 	public EjemploEjercicios() {
-
-		
+		boolean continuar = true;
+		while( continuar ) {
+			mostrarOpciones();
+			int option = pedirNumero();
+			
+			switch (option) {
+			case 0: {
+				Utils.getOut().println( Utils.ANSI_PURPLE.concat("\tSALIENDO").concat(Utils.ANSI_RESET) );
+				continuar = false;
+				break;
+			}
+			case 1: {
+				Utils.getOut().println( Utils.ANSI_BLUE.concat("-------Guia 1 - Ejericio 7--------").concat(Utils.ANSI_RESET) );
+				Guia1_Ej7();
+				break;
+			}
+			default:
+				Utils.getOut().println( Utils.ANSI_RED.concat("Opcion Invalida.").concat(Utils.ANSI_RESET) );
+			}
+		}
 	}
 	
+	public void mostrarOpciones() {
+		Utils.getOut().println(Utils.ANSI_GREEN.concat("===============================") );
+		Utils.getOut().println("========Menu Principal=========");
+		Utils.getOut().println("===============================".concat(Utils.ANSI_RESET) );
+		
+		Utils.getOut().println("\t 1. Guia 1 - Ejercicio 7");
+		Utils.getOut().println("\t 0. Salir \n");
+	}
 	
+	public int pedirNumero() {
+		Utils.getOut().print("Ingrese una opcion:");
+		Utils.getOut().flush();
+		
+		try {
+			String linea = Utils.getLector().readLine();
+			
+			return Integer.valueOf( linea );
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 	/*
 	 * Ejercicio 7:  Lee una contraseña ingresada por consola. El sistema debe validarla aplicando tres 
 	 * reglas: debe tener un mínimo de 8 caracteres de longitud, debe contener al menos un número, 
@@ -21,7 +59,9 @@ public class EjemploEjercicios {
 	 * Imprime un mensaje indicando si la contraseña es segura o vulnerable.
 	*/
 	public void Guia1_Ej7() {
-		Utils.getOut().println("Ingrese el password:");
+		Utils.getOut().print("\tIngrese el password:");
+		Utils.getOut().flush();
+		
 		try {
 			String psw = Utils.getLector().readLine();
 			
@@ -40,11 +80,12 @@ public class EjemploEjercicios {
 				
 			if(longitudValida && contieneNumeros && !contientePalabra)
 			{
-				Utils.getOut().println("Password SEGURO");
+				Utils.getOut().println("\tPassword SEGURO");
 			}else {
-				Utils.getOut().println("VULNERABLE");
+				Utils.getOut().println("\tVULNERABLE");
 			}
-				
+			Utils.getOut().println();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
