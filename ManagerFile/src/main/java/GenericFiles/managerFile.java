@@ -1,12 +1,16 @@
 package GenericFiles;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +24,7 @@ public class managerFile {
 		file = new File(ruta.concat(nombre));
 
 		ps = new PrintStream(System.out);
+		/*
 		try {
 			ps.println("Name:" + file.getName());
 			ps.println("Path:" + file.getPath());
@@ -39,10 +44,11 @@ public class managerFile {
 			ps.println("Es carpeta?:" + file.isDirectory());
 			// "Crea ARCHIVOS:" archivo.createNewFile();
 			// "Crea CARPETAS:" archivo.mkdir();
-			// "Renombrar:" archivo.renameTo("NuevoNombre.txt");
+			// "Renombrar:" archivo.renameTo("NuevoNombre.txt");	
 		} catch (IOException ex) {
 			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
 		}
+		*/
 	}
 
 	public void crearFileConBuffered() {
@@ -127,9 +133,9 @@ public class managerFile {
 			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
 		} finally {
 			try {
-				if (fs == null)
+				if (fs != null)
 					fs.close();
-				if (fos == null)
+				if (fos != null)
 					fos.close();
 			} catch (IOException ex) {
 				Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
@@ -165,7 +171,34 @@ public class managerFile {
 	 * @throws IOException si ocurre un error durante la lectura.
 	 */
 	public String LeerFileConBuffer(File f) {
-		return "";
+		FileReader fr = null;
+		BufferedReader br = null;
+		String texto = "";
+		
+		try {
+			fr = new FileReader(f);
+			br = new BufferedReader(fr);
+			
+			String linea ="";
+			while( (linea = br.readLine()) != null ) {
+				texto = texto.concat( linea.concat( String.valueOf('\n') ) );
+				//en vez de mostrarlo pueden o gruarlo en variable
+				//como tambien en un array o llamar directo a una
+				//funcion que la use
+			}
+			
+		} catch (IOException ex) {
+			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
+		}finally {
+			try {
+				if(fr!=null)fr.close();
+				if(br!=null) br.close();	
+			} catch (IOException ex) {
+				Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
+			}
+		}
+		
+		return texto;
 	}
 	
 	/**
@@ -176,7 +209,31 @@ public class managerFile {
 	 * @return El contenido completo del archivo como una cadena, o null si ocurre un error.
 	 */	
 	public String leerFileCaracterCaracter(File f) {
-		return "";
+		FileReader fr=null;
+		String texto = "";
+		
+		try {
+			fr = new FileReader(f);
+			//fr.read SOLO LEE 1 CARACTER
+			int CHAR ;
+			//al final de la linea encuentran char 13 y luego 10
+			while(  (CHAR = fr.read())  != -1   ) {
+				texto = texto.concat( String.valueOf( (char)CHAR ) );
+				//texto.concat( String.format("%c", CHAR)  );
+			}	
+		} catch (FileNotFoundException ex) {
+			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
+		}finally {
+			try {
+				if(fr!=null) fr.close();
+			} catch (IOException ex) {
+				Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
+			}
+		}
+		
+		return texto;
 	}
 	
 	/**
@@ -189,6 +246,47 @@ public class managerFile {
 	 * @param reemplazar     La cadena con la cual se reemplazarán las ocurrencias encontradas.
 	 */	
 	public void modificarArchivoTemporalLinea(File archivoOriginal, String buscar, String reemplazar)  {
+		File copia = new File("temportal.tmp");
+		FileReader fr = null;
+		BufferedReader br = null;
+		FileWriter fw = null;
+		PrintWriter pw = null;
+		
+		try {
+			fr = new FileReader( archivoOriginal );
+			br = new BufferedReader( fr );
+			
+			fw = new FileWriter( copia , true ); // true -> append
+			pw = new PrintWriter( fw );
+			
+			if(!copia.exists()) copia.createNewFile();
+			
+			String renglon = "";
+			while( (renglon = br.readLine()) != null ) {
+				if( renglon.contains(buscar) )
+				{
+					pw.println( renglon.replaceAll(buscar , reemplazar) );
+				}else {
+					pw.println( renglon );
+				}
+			}
+			pw.close();
+			fw.close();
+			
+			fr.close();
+			br.close();
+			
+			ps.println(archivoOriginal.exists());
+			//Files.move(copia.toPath() ,archivoOriginal.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			if( archivoOriginal.exists() ) {archivoOriginal.delete();}
+			if( copia.exists() ) {copia.renameTo( archivoOriginal) ;}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
