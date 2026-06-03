@@ -11,6 +11,10 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,30 +29,23 @@ public class managerFile {
 
 		ps = new PrintStream(System.out);
 		/*
-		try {
-			ps.println("Name:" + file.getName());
-			ps.println("Path:" + file.getPath());
-			ps.println("PathAbs:" + file.getAbsolutePath());
-			ps.println("PathCannon:" + file.getCanonicalPath());
-			ps.println("Contenedor del archivo:" + file.getParentFile());
-			ps.println("Parent:" + file.getParent());
-			ps.println("Tama�o:" + file.getTotalSpace());
-			ps.println("ejecutable?:" + file.canExecute());
-			ps.println("acceso de lectura:" + file.canRead());
-			ps.println("acceso de escrituta:" + file.canWrite());
-			ps.println("esta oculto?:" + file.isHidden());
-			// "Elimina:" archivo.delete();
-			// "Elimna, cuando cierra el programa:" archivo.deleteOnExit();
-			ps.println("existe?:" + file.exists());
-			ps.println("Es archivo?:" + file.isFile());
-			ps.println("Es carpeta?:" + file.isDirectory());
-			// "Crea ARCHIVOS:" archivo.createNewFile();
-			// "Crea CARPETAS:" archivo.mkdir();
-			// "Renombrar:" archivo.renameTo("NuevoNombre.txt");	
-		} catch (IOException ex) {
-			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
-		}
-		*/
+		 * try { ps.println("Name:" + file.getName()); ps.println("Path:" +
+		 * file.getPath()); ps.println("PathAbs:" + file.getAbsolutePath());
+		 * ps.println("PathCannon:" + file.getCanonicalPath());
+		 * ps.println("Contenedor del archivo:" + file.getParentFile());
+		 * ps.println("Parent:" + file.getParent()); ps.println("Tama�o:" +
+		 * file.getTotalSpace()); ps.println("ejecutable?:" + file.canExecute());
+		 * ps.println("acceso de lectura:" + file.canRead());
+		 * ps.println("acceso de escrituta:" + file.canWrite());
+		 * ps.println("esta oculto?:" + file.isHidden()); // "Elimina:"
+		 * archivo.delete(); // "Elimna, cuando cierra el programa:"
+		 * archivo.deleteOnExit(); ps.println("existe?:" + file.exists());
+		 * ps.println("Es archivo?:" + file.isFile()); ps.println("Es carpeta?:" +
+		 * file.isDirectory()); // "Crea ARCHIVOS:" archivo.createNewFile(); //
+		 * "Crea CARPETAS:" archivo.mkdir(); // "Renombrar:"
+		 * archivo.renameTo("NuevoNombre.txt"); } catch (IOException ex) {
+		 * Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex); }
+		 */
 	}
 
 	public void crearFileConBuffered() {
@@ -161,145 +158,189 @@ public class managerFile {
 	public File getFile() {
 		return this.file;
 	}
-	
+
 	/**
-	 * Lee todo el contenido de un archivo usando BufferedReader y devuelve el texto completo.
+	 * Lee todo el contenido de un archivo usando BufferedReader y devuelve el texto
+	 * completo.
 	 *
 	 * @param f un archivo al leer
 	 * @return Todo el texto leído del archivo como una cadena.
 	 * @throws FileNotFoundException si el archivo no existe.
-	 * @throws IOException si ocurre un error durante la lectura.
+	 * @throws IOException           si ocurre un error durante la lectura.
 	 */
 	public String LeerFileConBuffer(File f) {
 		FileReader fr = null;
 		BufferedReader br = null;
 		String texto = "";
-		
+
 		try {
 			fr = new FileReader(f);
 			br = new BufferedReader(fr);
-			
-			String linea ="";
-			while( (linea = br.readLine()) != null ) {
-				texto = texto.concat( linea.concat( String.valueOf('\n') ) );
-				//en vez de mostrarlo pueden o gruarlo en variable
-				//como tambien en un array o llamar directo a una
-				//funcion que la use
+
+			String linea = "";
+			while ((linea = br.readLine()) != null) {
+				texto = texto.concat(linea.concat(String.valueOf('\n')));
+				// en vez de mostrarlo pueden o gruarlo en variable
+				// como tambien en un array o llamar directo a una
+				// funcion que la use
 			}
-			
+
 		} catch (IOException ex) {
 			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
-		}finally {
+		} finally {
 			try {
-				if(fr!=null)fr.close();
-				if(br!=null) br.close();	
+				if (fr != null)
+					fr.close();
+				if (br != null)
+					br.close();
 			} catch (IOException ex) {
 				Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
 			}
 		}
-		
+
 		return texto;
 	}
-	
+
 	/**
-	 * Lee el contenido de un archivo carácter por carácter y devuelve el texto completo.
-	 * Maneja saltos de línea adecuadamente y concatena los caracteres en una cadena.
+	 * Lee el contenido de un archivo carácter por carácter y devuelve el texto
+	 * completo. Maneja saltos de línea adecuadamente y concatena los caracteres en
+	 * una cadena.
 	 *
 	 * @param f Archivo desde donde se leerán los caracteres.
-	 * @return El contenido completo del archivo como una cadena, o null si ocurre un error.
-	 */	
+	 * @return El contenido completo del archivo como una cadena, o null si ocurre
+	 *         un error.
+	 */
 	public String leerFileCaracterCaracter(File f) {
-		FileReader fr=null;
+		FileReader fr = null;
 		String texto = "";
-		
+
 		try {
 			fr = new FileReader(f);
-			//fr.read SOLO LEE 1 CARACTER
-			int CHAR ;
-			//al final de la linea encuentran char 13 y luego 10
-			while(  (CHAR = fr.read())  != -1   ) {
-				texto = texto.concat( String.valueOf( (char)CHAR ) );
-				//texto.concat( String.format("%c", CHAR)  );
-			}	
+			// fr.read SOLO LEE 1 CARACTER
+			int CHAR;
+			// al final de la linea encuentran char 13 y luego 10
+			while ((CHAR = fr.read()) != -1) {
+				texto = texto.concat(String.valueOf((char) CHAR));
+				// texto.concat( String.format("%c", CHAR) );
+			}
 		} catch (FileNotFoundException ex) {
 			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
 		} catch (IOException ex) {
 			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
-		}finally {
+		} finally {
 			try {
-				if(fr!=null) fr.close();
+				if (fr != null)
+					fr.close();
 			} catch (IOException ex) {
 				Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
 			}
 		}
-		
+
 		return texto;
 	}
-	
+
 	/**
 	 * Modifica un archivo original creando un archivo temporal donde reemplaza
-	 * todas las ocurrencias de una cadena buscada por otra cadena dada.
-	 * Luego elimina el archivo original y renombra el temporal con el nombre del archivo original.
+	 * todas las ocurrencias de una cadena buscada por otra cadena dada. Luego
+	 * elimina el archivo original y renombra el temporal con el nombre del archivo
+	 * original.
 	 *
 	 * @param archivoOriginal El archivo que será modificado.
-	 * @param buscar         La cadena que se busca en cada línea para ser reemplazada.
-	 * @param reemplazar     La cadena con la cual se reemplazarán las ocurrencias encontradas.
-	 */	
-	public void modificarArchivoTemporalLinea(File archivoOriginal, String buscar, String reemplazar)  {
+	 * @param buscar          La cadena que se busca en cada línea para ser
+	 *                        reemplazada.
+	 * @param reemplazar      La cadena con la cual se reemplazarán las ocurrencias
+	 *                        encontradas.
+	 */
+	public void modificarArchivoTemporalLinea(File archivoOriginal, String buscar, String reemplazar) {
 		File copia = new File("temportal.tmp");
 		FileReader fr = null;
 		BufferedReader br = null;
 		FileWriter fw = null;
 		PrintWriter pw = null;
-		
+
 		try {
-			fr = new FileReader( archivoOriginal );
-			br = new BufferedReader( fr );
-			
-			fw = new FileWriter( copia , true ); // true -> append
-			pw = new PrintWriter( fw );
-			
-			if(!copia.exists()) copia.createNewFile();
-			
+			fr = new FileReader(archivoOriginal);
+			br = new BufferedReader(fr);
+
+			fw = new FileWriter(copia, true); // true -> append
+			pw = new PrintWriter(fw);
+
+			if (!copia.exists())
+				copia.createNewFile();
+
 			String renglon = "";
-			while( (renglon = br.readLine()) != null ) {
-				if( renglon.contains(buscar) )
-				{
-					pw.println( renglon.replaceAll(buscar , reemplazar) );
-				}else {
-					pw.println( renglon );
+			while ((renglon = br.readLine()) != null) {
+				if (renglon.contains(buscar)) {
+					pw.println(renglon.replaceAll(buscar, reemplazar));
+				} else {
+					pw.println(renglon);
 				}
 			}
 			pw.close();
 			fw.close();
-			
+
 			fr.close();
 			br.close();
-			
+
 			ps.println(archivoOriginal.exists());
-			//Files.move(copia.toPath() ,archivoOriginal.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			if( archivoOriginal.exists() ) {archivoOriginal.delete();}
-			if( copia.exists() ) {copia.renameTo( archivoOriginal) ;}
-			
+			// Files.move(copia.toPath() ,archivoOriginal.toPath(),
+			// StandardCopyOption.REPLACE_EXISTING);
+			if (archivoOriginal.exists()) {
+				archivoOriginal.delete();
+			}
+			if (copia.exists()) {
+				copia.renameTo(archivoOriginal);
+			}
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	/**
-	 * Modifica el contenido de un archivo leyendo todas sus líneas en una LinkedList,
-	 * reemplazando en memoria las ocurrencias de una cadena dada, y luego escribiendo
-	 * el contenido modificado de nuevo en el archivo original.
+	 * Modifica el contenido de un archivo leyendo todas sus líneas en una
+	 * LinkedList, reemplazando en memoria las ocurrencias de una cadena dada, y
+	 * luego escribiendo el contenido modificado de nuevo en el archivo original.
 	 *
 	 * @param archivoOriginal El archivo que será leído y modificado.
-	 * @param buscar         La cadena que se desea buscar y reemplazar en el archivo.
-	 * @param reemplazar     La cadena que reemplazará las ocurrencias encontradas.
-	 */	
-	public void modificarArchivoConLinkedList(File archivoOriginal, String buscar, String reemplazar) {
-		
+	 * @param buscar          La cadena que se desea buscar y reemplazar en el
+	 *                        archivo.
+	 * @param reemplazar      La cadena que reemplazará las ocurrencias encontradas.
+	 */
+	public List<dtoProductos> archivoConArrayList(File f) {
+		ArrayList<dtoProductos> lineasArchivo = null;
+		FileReader fr = null;
+		BufferedReader br = null;
+
+		try {
+			fr = new FileReader(f);
+			br = new BufferedReader(fr);
+			lineasArchivo = new ArrayList<>();
+
+			String linea = "";
+			while ((linea = br.readLine()) != null) {
+				String[] aux = linea.split(",");
+				dtoProductos dto = new dtoProductos(Integer.valueOf(aux[0]), aux[1].toString(), Integer.valueOf(aux[2]),
+						Float.valueOf(aux[3]), aux[4]);
+				lineasArchivo.add(dto);
+			}
+		} catch (IOException ex) {
+			Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
+		} finally {
+			try {
+				if (fr != null)
+					fr.close();
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				Logger.getLogger(managerFile.class.getName()).log(Level.WARNING, null, ex);
+			}
+		}
+		return lineasArchivo;
 	}
+
 }
