@@ -1,5 +1,7 @@
 package GenericFiles;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -12,7 +14,7 @@ public class main {
 
 	public static void main(String[] args) {
 		PrintStream ps = new PrintStream(System.out);
-		managerFile mF = new managerFile("PROBANDO.TXT");
+		//managerFile mF = new managerFile("PROBANDO.TXT");
 
 		// mF.crearFileConPrintStream( mF.getFile() );
 		// mF.crearFileConPrinter(mF.getFile(), "lalalalalal", false);
@@ -28,21 +30,48 @@ public class main {
 		 * String.valueOf(l.getPrecio()) , String.valueOf(l.getCantidad()) )); }
 		 */
 
-		//Encriptado RSA priv-publ
-		String datoEncriptado = EncriptUtil.cifrarConClavePublica("Hola", (PublicKey)EncriptUtil.keys.get("RSAp"));
-		ps.printf("Texto a cifrar:%s \n ", "Hola");
-		ps.printf("Texto a Encriptado:%s \n Desencriptado:%s \n", datoEncriptado,
-				EncriptUtil.desCifrarConClavePublica(datoEncriptado, (PrivateKey)EncriptUtil.keys.get("RRSApr")));
+		// Encriptado RSA priv-publ
+		// String datoEncriptado = EncriptUtil.cifrarConClavePublica("Hola",
+		// (PublicKey)EncriptUtil.keys.get("RSAp"));
+		// ps.printf("Texto a cifrar:%s \n ", "Hola");
+		// ps.printf("Texto a Encriptado:%s \n Desencriptado:%s \n", datoEncriptado,
+		// EncriptUtil.desCifrarConClavePublica(datoEncriptado,
+		// (PrivateKey)EncriptUtil.keys.get("RRSApr")));
 
-		//Encriptado AES  publico
-		SecretKey pKey = (SecretKey)EncriptUtil.keys.get("AES");
-		String dato = EncriptUtil.cifrarAES("Hola", pKey);
-		ps.println( dato );
-		ps.println( EncriptUtil.desCifrarAES(dato, pKey) );
-		
-		//HASH  SHA-256
-		EncriptUtil.hashSha("password");
-		
+		// Encriptado AES publico
+		// SecretKey pKey = (SecretKey)EncriptUtil.keys.get("AES");
+		// String dato = EncriptUtil.cifrarAES("Hola", pKey);
+		// ps.println( dato );
+		// ps.println( EncriptUtil.desCifrarAES(dato, pKey) );
+
+		// HASH SHA-256
+		// EncriptUtil.hashSha("password");
+
+		FileBinary dump = new FileBinary();
+		String ruta = "DumpMemory.dpm";
+
+		try {
+			dump = dump.deSerializar(ruta);
+			ps.println("S esta ejecutando un programa BACKUP");
+		} catch (FileNotFoundException ex) {
+			ps.println("Programa Nuevo , sin archivo de backup.");
+			dump = new FileBinary();
+		} catch (IOException | ClassNotFoundException ex) {
+			ps.println("Error al carcar backup o crear nuevo programa");
+			dump = new FileBinary();
+		}
+
+		try {
+			dump.start();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		try {
+			dump.serializar(ruta);
+			ps.println("Programa cerrado y guardado.");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
-
 }
