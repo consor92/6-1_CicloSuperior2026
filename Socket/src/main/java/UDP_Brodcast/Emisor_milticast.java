@@ -13,6 +13,7 @@ public class Emisor_milticast {
 		try {
 			MulticastSocket sock = new MulticastSocket();
 			
+			sock.setSoTimeout(1000);
 			InetAddress group = 
 					InetAddress.getByName("230.0.0.0");//230.0.0.1
 			
@@ -21,9 +22,10 @@ public class Emisor_milticast {
 			
 			DatagramPacket pack = new DatagramPacket(
 					msg, 
-					msg.length,
-					group,
-					6790);
+					msg.length);
+			pack.setPort(6790);
+			pack.setAddress(group);
+			
 			sock.send(pack);
 			ps.println("Enviando.");
 			Thread.sleep(1000);
