@@ -14,7 +14,7 @@ public class FileChoiser {
 	public static String selectFile() {
         // 1. Creamos un Frame explícito (aunque no lo mostremos) para tener el control
         Frame parentFrame = new Frame();
-        W
+        
         // 2. Le pasamos nuestro Frame al FileDialog en lugar de 'null'
         FileDialog dialog = new FileDialog(parentFrame, "Seleccione archivo a enviar", FileDialog.LOAD);
         dialog.setVisible(true);
